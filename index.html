@@ -19,13 +19,26 @@
             placeholder="Add a new task..."
             autocomplete="off"
           />
-          <button type="submit">Add</button>
+          <button
+            type="submit"
+            class="icon-button add-button"
+            aria-label="Add task"
+            title="Add task"
+          >
+            <img src="assets/icons/add.svg" alt="" aria-hidden="true" />
+          </button>
         </form>
 
         <div class="toolbar">
           <span id="task-counter">0 tasks</span>
-          <button id="clear-completed" class="secondary" type="button">
-            Clear completed
+          <button
+            id="clear-completed"
+            class="secondary icon-button"
+            type="button"
+            aria-label="Clear completed tasks"
+            title="Clear completed tasks"
+          >
+            <img src="assets/icons/clear.svg" alt="" aria-hidden="true" />
           </button>
         </div>
 

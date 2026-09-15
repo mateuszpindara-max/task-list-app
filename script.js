@@ -5,8 +5,18 @@ const counter = document.getElementById('task-counter');
 const clearCompletedButton = document.getElementById('clear-completed');
 
 const STORAGE_KEY = 'task-list-items';
+const ICON_PATH = 'assets/icons';
 
 let tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+function createIcon(name) {
+  const icon = document.createElement('img');
+  icon.src = `${ICON_PATH}/${name}.svg`;
+  icon.alt = '';
+  icon.setAttribute('aria-hidden', 'true');
+  icon.className = 'button-icon';
+  return icon;
+}
 
 function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
@@ -50,6 +60,7 @@ function renderTasks() {
 
     const editField = document.createElement('div');
     editField.className = 'task-edit-field';
+    editField.hidden = true;
 
     const editInput = document.createElement('input');
     editInput.type = 'text';
@@ -58,20 +69,34 @@ function renderTasks() {
     editInput.hidden = true;
     editInput.setAttribute('aria-label', `Edit task ${task.text}`);
 
-    const cancelEditButton = document.createElement('button');
-    cancelEditButton.type = 'button';
-    cancelEditButton.className = 'cancel-edit-btn';
-    cancelEditButton.textContent = '×';
-    cancelEditButton.setAttribute('aria-label', `Cancel editing ${task.text}`);
-    cancelEditButton.hidden = true;
+    let cancelEditButton = null;
+
+    const ensureCancelButton = () => {
+      if (!cancelEditButton) {
+        cancelEditButton = document.createElement('button');
+        cancelEditButton.type = 'button';
+        cancelEditButton.className = 'cancel-edit-btn';
+        cancelEditButton.title = `Cancel editing ${task.text}`;
+        cancelEditButton.setAttribute('aria-label', `Cancel editing ${task.text}`);
+        cancelEditButton.appendChild(createIcon('close'));
+        cancelEditButton.addEventListener('click', () => {
+          cancelEditing();
+        });
+        editField.appendChild(cancelEditButton);
+      }
+    };
 
     const startEditing = () => {
       editInput.value = task.text;
+      ensureCancelButton();
+      editField.hidden = false;
       editInput.hidden = false;
       cancelEditButton.hidden = false;
       text.hidden = true;
-      editButton.textContent = 'Save';
+      editButton.title = `Save ${task.text}`;
       editButton.setAttribute('aria-label', `Save ${task.text}`);
+      editButton.innerHTML = '';
+      editButton.appendChild(createIcon('save'));
       listItem.classList.add('editing');
       editInput.focus();
       editInput.select();
@@ -79,11 +104,18 @@ function renderTasks() {
 
     const cancelEditing = () => {
       editInput.value = task.text;
+      editField.hidden = true;
       editInput.hidden = true;
-      cancelEditButton.hidden = true;
+      if (cancelEditButton) {
+        cancelEditButton.hidden = true;
+        cancelEditButton.remove();
+        cancelEditButton = null;
+      }
       text.hidden = false;
-      editButton.textContent = 'Edit';
+      editButton.title = `Edit ${task.text}`;
       editButton.setAttribute('aria-label', `Edit ${task.text}`);
+      editButton.innerHTML = '';
+      editButton.appendChild(createIcon('edit'));
       listItem.classList.remove('editing');
     };
 
@@ -111,21 +143,17 @@ function renderTasks() {
       }
     });
 
-    cancelEditButton.addEventListener('click', () => {
-      cancelEditing();
-    });
-
     editField.appendChild(editInput);
-    editField.appendChild(cancelEditButton);
 
     const actions = document.createElement('div');
     actions.className = 'task-actions';
 
     const editButton = document.createElement('button');
     editButton.type = 'button';
-    editButton.className = 'edit-btn';
-    editButton.textContent = 'Edit';
+    editButton.className = 'edit-btn icon-button';
+    editButton.title = `Edit ${task.text}`;
     editButton.setAttribute('aria-label', `Edit ${task.text}`);
+    editButton.appendChild(createIcon('edit'));
     editButton.addEventListener('click', () => {
       if (editInput.hidden) {
         startEditing();
@@ -137,9 +165,10 @@ function renderTasks() {
 
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
-    deleteButton.className = 'delete-btn';
-    deleteButton.textContent = 'Delete';
+    deleteButton.className = 'delete-btn icon-button';
+    deleteButton.title = `Delete ${task.text}`;
     deleteButton.setAttribute('aria-label', `Delete ${task.text}`);
+    deleteButton.appendChild(createIcon('delete'));
     deleteButton.addEventListener('click', () => {
       tasks = tasks.filter((item) => item.id !== task.id);
       saveTasks();

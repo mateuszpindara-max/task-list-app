@@ -1,14 +1,14 @@
 :root {
-  --bg: #f4f7fb;
+  --bg: #f6f7f9;
   --card: #ffffff;
-  --primary: #4f46e5;
-  --primary-dark: #3730a3;
+  --primary: #111827;
+  --primary-dark: #1f2937;
   --danger: #ef4444;
   --text: #1f2937;
   --muted: #6b7280;
   --border: #e5e7eb;
   --success: #10b981;
-  --shadow: rgba(15, 23, 42, 0.08);
+  --shadow: rgba(15, 23, 42, 0.06);
 }
 
 * {
@@ -19,7 +19,7 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #eef2ff 0%, var(--bg) 100%);
+  background: var(--bg);
   color: var(--text);
 }
 
@@ -38,15 +38,18 @@ input {
 .card {
   width: min(100%, 560px);
   background: var(--card);
-  border-radius: 18px;
-  box-shadow: 0 12px 28px var(--shadow);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px var(--shadow);
   padding: 28px 24px 20px;
 }
 
 h1 {
   margin: 0 0 20px;
-  font-size: clamp(2rem, 2.5vw, 2.5rem);
+  font-size: clamp(1.8rem, 2vw, 2.2rem);
   text-align: center;
+  font-weight: 700;
+  letter-spacing: -0.04em;
 }
 
 .task-form {
@@ -61,36 +64,86 @@ h1 {
   border: 1px solid var(--border);
   border-radius: 10px;
   outline: none;
+  background: #fafafa;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .task-form input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  border-color: #c7ccd5;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.05);
 }
 
 .task-form button,
 .secondary,
 .edit-btn,
-.delete-btn {
+.delete-btn,
+.cancel-edit-btn {
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
-.task-form button {
-  background: var(--primary);
-  color: white;
-  padding: 12px 18px;
-  font-weight: 700;
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
 }
 
-.task-form button:hover,
+.icon-button img,
+.task-actions img,
+.cancel-edit-btn img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.task-form .add-button img {
+  filter: brightness(0) invert(1);
+}
+
+.task-form .add-button {
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.task-form .add-button:hover,
 .secondary:hover,
 .edit-btn:hover,
-.delete-btn:hover {
+.delete-btn:hover,
+.cancel-edit-btn:hover,
+.cancel-edit-btn:focus-visible {
   transform: translateY(-1px);
+}
+
+.task-form .add-button:hover,
+.task-form .add-button:focus-visible,
+.secondary:hover,
+.secondary:focus-visible,
+.edit-btn:hover,
+.edit-btn:focus-visible,
+.delete-btn:hover,
+.delete-btn:focus-visible,
+.cancel-edit-btn:hover,
+.cancel-edit-btn:focus-visible {
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.06);
+  outline: none;
+}
+
+.secondary:focus-visible,
+.edit-btn:focus-visible,
+.delete-btn:focus-visible,
+.task-form .add-button:focus-visible {
+  outline: none;
 }
 
 .toolbar {
@@ -104,9 +157,10 @@ h1 {
 }
 
 .secondary {
-  background: #eef2ff;
-  color: var(--primary-dark);
-  padding: 8px 12px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0;
 }
 
 .task-list {
@@ -123,9 +177,9 @@ h1 {
   align-items: center;
   gap: 12px;
   padding: 12px 10px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: #fafafa;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
 }
 
 .task-item input[type='checkbox'] {
@@ -149,37 +203,53 @@ h1 {
 .task-edit-input {
   flex: 1;
   padding: 8px 10px;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--border);
   border-radius: 8px;
   outline: none;
+  background: #fafafa;
   font: inherit;
 }
 
 .cancel-edit-btn {
   width: 28px;
   height: 28px;
-  border: none;
+  border: 1px solid rgba(239, 68, 68, 0.2);
   border-radius: 50%;
-  background: #fee2e2;
+  background: transparent;
   color: var(--danger);
-  font-size: 1.4rem;
-  line-height: 1;
-  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .cancel-edit-btn:hover,
 .cancel-edit-btn:focus-visible {
-  background: #fecaca;
+  background: rgba(239, 68, 68, 0.04);
   transform: scale(1.08);
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.08);
   outline: none;
+}
+
+.edit-btn,
+.delete-btn,
+.secondary,
+.task-form .add-button {
+  user-select: none;
 }
 
 .task-actions {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.task-actions .icon-button,
+.task-actions .edit-btn,
+.task-actions .delete-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
 }
 
 .task-item.completed .task-text {
@@ -194,18 +264,22 @@ h1 {
 
 .edit-btn,
 .delete-btn {
-  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   font-weight: 600;
+  background: transparent;
+  border: 1px solid var(--border);
 }
 
 .edit-btn {
-  background: #e0e7ff;
   color: var(--primary-dark);
 }
 
 .delete-btn {
-  background: #fee2e2;
   color: var(--danger);
+  border-color: rgba(239, 68, 68, 0.18);
 }
 
 .empty-state {
