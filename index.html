@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task List</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="card">
+        <h1>Task List</h1>
+
+        <form id="task-form" class="task-form">
+          <label class="sr-only" for="task-input">New task</label>
+          <input
+            id="task-input"
+            type="text"
+            placeholder="Add a new task..."
+            autocomplete="off"
+          />
+          <button type="submit">Add</button>
+        </form>
+
+        <div class="toolbar">
+          <span id="task-counter">0 tasks</span>
+          <button id="clear-completed" class="secondary" type="button">
+            Clear completed
+          </button>
+        </div>
+
+        <ul id="task-list" class="task-list" aria-live="polite"></ul>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
