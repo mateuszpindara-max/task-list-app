@@ -48,6 +48,33 @@ function renderTasks() {
     text.className = 'task-text';
     text.textContent = task.text;
 
+    const actions = document.createElement('div');
+    actions.className = 'task-actions';
+
+    const editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.className = 'edit-btn';
+    editButton.textContent = 'Edit';
+    editButton.setAttribute('aria-label', `Edit ${task.text}`);
+    editButton.addEventListener('click', () => {
+      const updatedText = window.prompt('Edit task:', task.text);
+
+      if (updatedText === null) {
+        return;
+      }
+
+      const cleanText = updatedText.trim();
+
+      if (!cleanText) {
+        window.alert('Task cannot be empty.');
+        return;
+      }
+
+      task.text = cleanText;
+      saveTasks();
+      renderTasks();
+    });
+
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'delete-btn';
@@ -59,9 +86,12 @@ function renderTasks() {
       renderTasks();
     });
 
+    actions.appendChild(editButton);
+    actions.appendChild(deleteButton);
+
     listItem.appendChild(checkbox);
     listItem.appendChild(text);
-    listItem.appendChild(deleteButton);
+    listItem.appendChild(actions);
     taskList.appendChild(listItem);
   });
 

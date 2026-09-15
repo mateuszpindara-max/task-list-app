@@ -71,6 +71,7 @@ h1 {
 
 .task-form button,
 .secondary,
+.edit-btn,
 .delete-btn {
   border: none;
   border-radius: 10px;
@@ -87,6 +88,7 @@ h1 {
 
 .task-form button:hover,
 .secondary:hover,
+.edit-btn:hover,
 .delete-btn:hover {
   transform: translateY(-1px);
 }
@@ -137,16 +139,31 @@ h1 {
   word-break: break-word;
 }
 
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .task-item.completed .task-text {
   text-decoration: line-through;
   color: var(--muted);
 }
 
+.edit-btn,
+.delete-btn {
+  padding: 8px 10px;
+  font-weight: 600;
+}
+
+.edit-btn {
+  background: #e0e7ff;
+  color: var(--primary-dark);
+}
+
 .delete-btn {
   background: #fee2e2;
   color: var(--danger);
-  padding: 8px 10px;
-  font-weight: 600;
 }
 
 .empty-state {
