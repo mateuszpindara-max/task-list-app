@@ -139,6 +139,43 @@ h1 {
   word-break: break-word;
 }
 
+.task-edit-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.task-edit-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  outline: none;
+  font: inherit;
+}
+
+.cancel-edit-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: var(--danger);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cancel-edit-btn:hover,
+.cancel-edit-btn:focus-visible {
+  background: #fecaca;
+  transform: scale(1.08);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+  outline: none;
+}
+
 .task-actions {
   display: flex;
   align-items: center;
@@ -148,6 +185,11 @@ h1 {
 .task-item.completed .task-text {
   text-decoration: line-through;
   color: var(--muted);
+}
+
+.task-item.editing {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
 }
 
 .edit-btn,

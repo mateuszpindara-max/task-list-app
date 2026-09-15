@@ -48,6 +48,76 @@ function renderTasks() {
     text.className = 'task-text';
     text.textContent = task.text;
 
+    const editField = document.createElement('div');
+    editField.className = 'task-edit-field';
+
+    const editInput = document.createElement('input');
+    editInput.type = 'text';
+    editInput.className = 'task-edit-input';
+    editInput.value = task.text;
+    editInput.hidden = true;
+    editInput.setAttribute('aria-label', `Edit task ${task.text}`);
+
+    const cancelEditButton = document.createElement('button');
+    cancelEditButton.type = 'button';
+    cancelEditButton.className = 'cancel-edit-btn';
+    cancelEditButton.textContent = '×';
+    cancelEditButton.setAttribute('aria-label', `Cancel editing ${task.text}`);
+    cancelEditButton.hidden = true;
+
+    const startEditing = () => {
+      editInput.value = task.text;
+      editInput.hidden = false;
+      cancelEditButton.hidden = false;
+      text.hidden = true;
+      editButton.textContent = 'Save';
+      editButton.setAttribute('aria-label', `Save ${task.text}`);
+      listItem.classList.add('editing');
+      editInput.focus();
+      editInput.select();
+    };
+
+    const cancelEditing = () => {
+      editInput.value = task.text;
+      editInput.hidden = true;
+      cancelEditButton.hidden = true;
+      text.hidden = false;
+      editButton.textContent = 'Edit';
+      editButton.setAttribute('aria-label', `Edit ${task.text}`);
+      listItem.classList.remove('editing');
+    };
+
+    const saveEditing = () => {
+      const cleanText = editInput.value.trim();
+
+      if (!cleanText) {
+        window.alert('Task cannot be empty.');
+        editInput.focus();
+        return;
+      }
+
+      task.text = cleanText;
+      saveTasks();
+      renderTasks();
+    };
+
+    editInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        saveEditing();
+      }
+
+      if (event.key === 'Escape') {
+        cancelEditing();
+      }
+    });
+
+    cancelEditButton.addEventListener('click', () => {
+      cancelEditing();
+    });
+
+    editField.appendChild(editInput);
+    editField.appendChild(cancelEditButton);
+
     const actions = document.createElement('div');
     actions.className = 'task-actions';
 
@@ -57,22 +127,12 @@ function renderTasks() {
     editButton.textContent = 'Edit';
     editButton.setAttribute('aria-label', `Edit ${task.text}`);
     editButton.addEventListener('click', () => {
-      const updatedText = window.prompt('Edit task:', task.text);
-
-      if (updatedText === null) {
+      if (editInput.hidden) {
+        startEditing();
         return;
       }
 
-      const cleanText = updatedText.trim();
-
-      if (!cleanText) {
-        window.alert('Task cannot be empty.');
-        return;
-      }
-
-      task.text = cleanText;
-      saveTasks();
-      renderTasks();
+      saveEditing();
     });
 
     const deleteButton = document.createElement('button');
@@ -91,6 +151,7 @@ function renderTasks() {
 
     listItem.appendChild(checkbox);
     listItem.appendChild(text);
+    listItem.appendChild(editField);
     listItem.appendChild(actions);
     taskList.appendChild(listItem);
   });
